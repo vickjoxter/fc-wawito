@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Feliz Cumple 🎂</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #1e1e2e;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        overflow: hidden;
+    }
+
+    .container {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .cake {
+        width: 260px;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .layer {
+        width: 260px;
+        border-radius: 6px;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: aparecer 0.6s forwards;
+    }
+
+    .bizcocho {
+        height: 30px;
+        background: #d2a679;
+    }
+
+    .crema {
+        height: 15px;
+        background: #fff0f5;
+    }
+
+    .cubierta {
+        height: 22px;
+        background: #ffb6c1;
+        border-radius: 12px 12px 6px 6px;
+    }
+
+    .vela {
+        width: 8px;
+        height: 45px;
+        background: white;
+        margin-bottom: 5px;
+        position: relative;
+        opacity: 0;
+        animation: aparecer 0.6s forwards;
+    }
+
+    .llama {
+        width: 12px;
+        height: 12px;
+        background: orange;
+        border-radius: 50%;
+        position: absolute;
+        top: -12px;
+        left: -2px;
+        animation: parpadeo 0.8s infinite;
+    }
+
+    .sobre {
+        width: 60px;
+        height: 40px;
+        background: #ff5f9e;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .sobre::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-top: 20px solid #ff87b7;
+        border-left: 30px solid transparent;
+        border-right: 30px solid transparent;
+        box-sizing: border-box;
+    }
+
+    .carta {
+        width: 260px;
+        background: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 10px;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .carta.mostrar {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    @keyframes aparecer {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes parpadeo {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .confeti {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: pink;
+        top: -10px;
+        animation: caer 4s linear infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes caer {
+        to {
+            transform: translateY(110vh) rotate(360deg);
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="center">
+        <div class="cake" id="cake"></div>
+        <div class="sobre" onclick="mostrarCarta()"></div>
+    </div>
+
+    <div class="carta" id="carta">
+        <h3>💌</h3>
+        <p>
+            Feliz cumpleaños mi niño precioso.<br><br>
+            Gracias por existir, por ser tú  
+            y por hacer mis días más lindos.
+        </p>
+    </div>
+</div>
+
+<script>
+    const cake = document.getElementById("cake");
+    const carta = document.getElementById("carta");
+
+    const capas = [
+        "bizcocho",
+        "crema",
+        "bizcocho",
+        "crema",
+        "bizcocho",
+        "cubierta"
+    ];
+
+    let delay = 0;
+
+    capas.forEach(tipo => {
+        setTimeout(() => {
+            const layer = document.createElement("div");
+            layer.classList.add("layer", tipo);
+            cake.appendChild(layer);
+        }, delay);
+        delay += 600;
+    });
+
+    setTimeout(() => {
+        const vela = document.createElement("div");
+        vela.classList.add("vela");
+
+        const llama = document.createElement("div");
+        llama.classList.add("llama");
+
+        vela.appendChild(llama);
+        cake.appendChild(vela);
+    }, delay);
+
+    function mostrarCarta() {
+        carta.classList.toggle("mostrar");
+    }
+
+    // confeti
+    for (let i = 0; i < 30; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confeti");
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.animationDelay = Math.random() * 4 + "s";
+        c.style.background = ["#ff5f9e", "#ffd166", "#8ecae6"][Math.floor(Math.random()*3)];
+        document.body.appendChild(c);
+    }
+</script>
+
+</body>
+</html>
