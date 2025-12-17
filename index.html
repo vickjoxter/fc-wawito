@@ -2,34 +2,42 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Feliz Cumple 🎂</title>
 
 <style>
     body {
         margin: 0;
-        height: 100vh;
+        min-height: 100vh;
         background: #1e1e2e;
         display: flex;
         justify-content: center;
         align-items: center;
         font-family: Arial, Helvetica, sans-serif;
         color: white;
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
     .container {
         display: flex;
-        gap: 30px;
+        flex-direction: column;
         align-items: center;
+        gap: 25px;
+        padding: 20px;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
     }
 
     .center {
         text-align: center;
+        width: 100%;
+        position: relative;
     }
 
     .cake {
-        width: 260px;
-        margin-bottom: 15px;
+        width: 240px;
+        margin: 0 auto 10px;
         display: flex;
         flex-direction: column-reverse;
         align-items: center;
@@ -38,7 +46,7 @@
     }
 
     .layer {
-        width: 260px;
+        width: 240px;
         border-radius: 6px;
         opacity: 0;
         transform: translateY(15px);
@@ -46,12 +54,12 @@
     }
 
     .bizcocho {
-        height: 30px;
+        height: 28px;
         background: #d2a679;
     }
 
     .crema {
-        height: 15px;
+        height: 14px;
         background: #fff0f5;
     }
 
@@ -62,8 +70,8 @@
     }
 
     .vela {
-        width: 8px;
-        height: 45px;
+        width: 6px;
+        height: 40px;
         background: white;
         margin-bottom: 5px;
         position: relative;
@@ -72,24 +80,33 @@
     }
 
     .llama {
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         background: orange;
         border-radius: 50%;
         position: absolute;
-        top: -12px;
+        top: -10px;
         left: -2px;
         animation: parpadeo 0.8s infinite;
     }
 
-    .sobre {
-        width: 60px;
-        height: 40px;
-        background: #ff5f9e;
-        border-radius: 5px;
-        cursor: pointer;
+    .sobre-wrapper {
         position: relative;
+        width: 70px;
+        height: 80px;
         margin: 0 auto;
+    }
+
+    .sobre {
+        width: 70px;
+        height: 45px;
+        background: #ff5f9e;
+        border-radius: 6px;
+        cursor: pointer;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 3;
     }
 
     .sobre::before {
@@ -99,25 +116,30 @@
         left: 0;
         width: 100%;
         height: 100%;
-        border-top: 20px solid #ff87b7;
-        border-left: 30px solid transparent;
-        border-right: 30px solid transparent;
+        border-top: 22px solid #ff87b7;
+        border-left: 35px solid transparent;
+        border-right: 35px solid transparent;
         box-sizing: border-box;
     }
 
     .carta {
-        width: 260px;
-        background: rgba(255,255,255,0.1);
-        padding: 20px;
-        border-radius: 10px;
+        width: 100%;
+        background: rgba(255,255,255,0.12);
+        padding: 18px;
+        border-radius: 12px;
+        text-align: center;
+        position: absolute;
+        bottom: 10px;
+        left: 0;
         opacity: 0;
-        transform: translateX(-10px);
-        transition: opacity 0.5s, transform 0.5s;
+        transform: translateY(30px) scale(0.98);
+        transition: transform 0.6s ease, opacity 0.6s ease;
+        z-index: 1;
     }
 
     .carta.mostrar {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(-90px) scale(1);
     }
 
     @keyframes aparecer {
@@ -135,12 +157,12 @@
 
     .confeti {
         position: absolute;
-        width: 6px;
-        height: 6px;
-        background: pink;
+        width: 5px;
+        height: 5px;
         top: -10px;
         animation: caer 4s linear infinite;
         opacity: 0.8;
+        z-index: 0;
     }
 
     @keyframes caer {
@@ -154,24 +176,29 @@
 <body>
 
 <div class="container">
+
     <div class="center">
         <div class="cake" id="cake"></div>
-        <div class="sobre" onclick="mostrarCarta()"></div>
+
+        <div class="sobre-wrapper">
+            <div class="carta" id="carta">
+                <p>
+                    Feliz cumpleaños mi niño precioso.<br><br>
+                    Gracias por existir, por ser tú  
+                    y por hacer mi vida más linda.
+                </p>
+            </div>
+
+            <div class="sobre" onclick="mostrarCarta()" ontouchstart="mostrarCarta()"></div>
+        </div>
     </div>
 
-    <div class="carta" id="carta">
-        <h3>💌</h3>
-        <p>
-            Feliz cumpleaños mi niño precioso.<br><br>
-            Gracias por existir, por ser tú  
-            y por hacer mis días más lindos.
-        </p>
-    </div>
 </div>
 
 <script>
     const cake = document.getElementById("cake");
     const carta = document.getElementById("carta");
+    let abierta = false;
 
     const capas = [
         "bizcocho",
@@ -205,11 +232,18 @@
     }, delay);
 
     function mostrarCarta() {
-        carta.classList.toggle("mostrar");
+        if (!abierta) {
+            carta.classList.add("mostrar");
+            abierta = true;
+
+            if (navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+        }
     }
 
     // confeti
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 28; i++) {
         const c = document.createElement("div");
         c.classList.add("confeti");
         c.style.left = Math.random() * 100 + "vw";
